@@ -1,20 +1,25 @@
 import SwiftUI
 
 struct RegisterView: View {
-    @StateObject private var vm = AuthViewModel()
     @EnvironmentObject var appState: AppState
+    @EnvironmentObject var vm: AuthViewModel
 
     var body: some View {
         VStack(spacing: 16) {
+            Text("Тіркелу")
+                .font(.largeTitle)
+                .bold()
+
             TextField("Email", text: $vm.email)
+                .keyboardType(.emailAddress)
                 .disableAutocorrection(true)
                 .textInputAutocapitalization(.never)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
 
-            SecureField("Password", text: $vm.password)
+            SecureField("Құпиясөз", text: $vm.password)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
 
-            TextField("Username", text: $vm.username)
+            TextField("Пайдаланушы аты", text: $vm.username)
                 .disableAutocorrection(true)
                 .textInputAutocapitalization(.never)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -22,10 +27,9 @@ struct RegisterView: View {
             if vm.isLoading {
                 ProgressView()
             } else {
-                Button("Register") {
+                Button("Тіркелу") {
                     vm.register { success in
                         if success {
-                            // Регистрациядан кейін автоматты түрде логин экранына ауысу
                             appState.showLogin = true
                         }
                     }
@@ -36,6 +40,8 @@ struct RegisterView: View {
             if let error = vm.errorMessage {
                 Text(error)
                     .foregroundColor(.red)
+                    .multilineTextAlignment(.center)
+                    .padding(.top)
             }
         }
         .padding()

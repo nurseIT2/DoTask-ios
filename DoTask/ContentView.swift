@@ -6,8 +6,8 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             VStack {
-                if appState.isLoggedIn {
-                    HomeView()
+                if appState.isLoggedIn, let userId = appState.currentUserId {
+                    HomeView(userId: userId)
                 } else {
                     if appState.showLogin {
                         LoginView()
