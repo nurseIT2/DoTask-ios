@@ -1,24 +1,29 @@
-//
-//  ContentView.swift
-//  DoTask
-//
-//  Created by Nurseit on 03.06.2025.
-//
-
 import SwiftUI
 
 struct ContentView: View {
-    var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
-    }
-}
+    @EnvironmentObject var appState: AppState
 
-#Preview {
-    ContentView()
+    var body: some View {
+        NavigationView {
+            VStack {
+                if appState.isLoggedIn {
+                    HomeView()
+                } else {
+                    if appState.showLogin {
+                        LoginView()
+                    } else {
+                        RegisterView()
+                    }
+                }
+
+                if !appState.isLoggedIn {
+                    Button(appState.showLogin ? "No account? Register" : "Have an account? Login") {
+                        appState.showLogin.toggle()
+                    }
+                    .padding(.top)
+                }
+            }
+            .navigationTitle("DoTask")
+        }
+    }
 }

@@ -1,17 +1,18 @@
-//
-//  DoTaskApp.swift
-//  DoTask
-//
-//  Created by Nurseit on 03.06.2025.
-//
-
 import SwiftUI
+import Firebase
 
 @main
 struct DoTaskApp: App {
+    @StateObject var appState = AppState()
+
+    init() {
+        FirebaseApp.configure()
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(appState)
         }
     }
 }
