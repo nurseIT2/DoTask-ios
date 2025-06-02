@@ -9,6 +9,11 @@ class TaskViewModel: ObservableObject {
     private var userId: String
     private var databaseRef: DatabaseReference
 
+    // Expose databaseRef for testing purposes
+    var testDatabaseRef: DatabaseReference {
+        return databaseRef
+    }
+
     init(userId: String) {
         self.userId = userId
         self.databaseRef = Database.database().reference().child("tasks").child(userId)
@@ -16,22 +21,22 @@ class TaskViewModel: ObservableObject {
     }
 
     func loadTasks() {
-            isLoading = true // Начинаем загрузку
-            databaseRef.observe(.value) { snapshot in
-                var tempTasks = [Task]()
-                for child in snapshot.children {
-                    if let snap = child as? DataSnapshot,
-                       let dict = snap.value as? [String: Any],
-                       let task = Task(snapshot: dict, id: snap.key) {
-                        tempTasks.append(task)
-                    }
-                }
-                DispatchQueue.main.async {
-                    self.tasks = tempTasks
-                    self.isLoading = false // Загрузка завершена
+        isLoading = true // Start loading
+        databaseRef.observe(.value) { snapshot in
+            var tempTasks = [Task]()
+            for child in snapshot.children {
+                if let snap = child as? DataSnapshot,
+                   let dict = snap.value as? [String: Any],
+                   let task = Task(snapshot: dict, id: snap.key) {
+                    tempTasks.append(task)
                 }
             }
+            DispatchQueue.main.async {
+                self.tasks = tempTasks
+                self.isLoading = false // Loading finished
+            }
         }
+    }
 
     func addTask(title: String, details: String) {
         let newTask = Task(title: title, details: details)
