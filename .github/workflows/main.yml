@@ -28,10 +28,9 @@ jobs:
           -destination 'platform=iOS Simulator,name=iPhone 14' \
           CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
 
-    - name: Run Tests
-      run: |
-        xcodebuild test \
-          -workspace DoTask.xcworkspace \
-          -scheme DoTask \
-          -destination 'platform=iOS Simulator,name=iPhone 14' \
-          CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+xcodebuild clean build \
+  -project DoTask.xcodeproj \
+  -scheme DoTask \
+  -destination "platform=iOS Simulator,name=iPhone 14" \
+  CODE_SIGN_IDENTITY="" \
+  CODE_SIGNING_REQUIRED=NO
