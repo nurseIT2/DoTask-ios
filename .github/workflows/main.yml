@@ -1,0 +1,42 @@
+name: iOS CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    name: Build and Test (iOS)
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Xcode
+      run: sudo xcode-select -s /Applications/Xcode_15.2.app
+      # Немесе: xcodebuild -showsdks арқылы тексеріңіз
+
+    - name: Install CocoaPods (егер қолдансаңыз)
+      run: |
+        gem install cocoapods
+        pod install
+      working-directory: DoTask
+
+    - name: Build the app
+      run: |
+        xcodebuild clean build \
+          -workspace DoTask.xcworkspace \
+          -scheme DoTask \
+          -destination 'platform=iOS Simulator,name=iPhone 14' \
+          CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+
+    - name: Run Tests
+      run: |
+        xcodebuild test \
+          -workspace DoTask.xcworkspace \
+          -scheme DoTask \
+          -destination 'platform=iOS Simulator,name=iPhone 14' \
+          CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
