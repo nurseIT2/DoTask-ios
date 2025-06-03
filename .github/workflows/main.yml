@@ -19,11 +19,6 @@ jobs:
       run: sudo xcode-select -s /Applications/Xcode_15.2.app
       # Немесе: xcodebuild -showsdks арқылы тексеріңіз
 
-    - name: Install CocoaPods (егер қолдансаңыз)
-      run: |
-        gem install cocoapods
-        pod install
-      working-directory: DoTask
 
     - name: Build the app
       run: |
