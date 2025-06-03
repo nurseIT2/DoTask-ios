@@ -1,38 +1,35 @@
 import SwiftUI
 
 struct LoginView: View {
-    @StateObject private var vm = AuthViewModel()
+    @EnvironmentObject var authVM: AuthViewModel
     @EnvironmentObject var appState: AppState
 
     var body: some View {
-        VStack(spacing: 16) {
-            TextField("Email", text: $vm.email)
-                .disableAutocorrection(true)
-                .textInputAutocapitalization(.never)
+        VStack {
+            TextField("Email", text: $authVM.email)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
-
-            SecureField("Password", text: $vm.password)
+                .padding()
+            SecureField("Password", text: $authVM.password)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
+                .padding()
 
-            if vm.isLoading {
+            if authVM.isLoading {
                 ProgressView()
-            } else {
-                Button("Login") {
-                    vm.login { success in
-                        if success {
-                            // Логин сәтті өтіп, басты бетке өту
-                            appState.isLoggedIn = true
-                        }
+            }
+
+            if let error = authVM.errorMessage {
+                Text(error).foregroundColor(.red)
+            }
+
+            Button("Login") {
+                authVM.login { success in
+                    if success {
+                        // Навигация в ContentView произойдет автоматически,
+                        // потому что AppState обновился
                     }
                 }
-                .padding()
             }
-
-            if let error = vm.errorMessage {
-                Text(error)
-                    .foregroundColor(.red)
-            }
+            .padding()
         }
-        .padding()
     }
 }
