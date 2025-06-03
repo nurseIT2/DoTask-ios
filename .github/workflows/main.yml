@@ -2,9 +2,9 @@ name: iOS CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, async ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, async ]
 
 jobs:
   build-and-test:
